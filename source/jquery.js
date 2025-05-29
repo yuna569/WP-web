@@ -221,6 +221,35 @@ $(document).ready(function () {
 		})
 	})
 
+	var req = $.ajax({
+		url: "/rss",
+		dataType: "xml"
+		});
+	req.done(function(data) {
+		var items = $(data).find("item");
+		if (items.length > 0) {
+			items = items.slice(0,5);
+			var uTag = $("<ul />");
+			items.each(function() {
+				var item = $(this);
+				var lk = item.find("link").text();
+				var title = item.find("title").text();
+				var aTag = $("<a />")
+				.attr({
+					"href": lk,
+					"target": "_blank"
+				})
+				.text(title);
+				var liTag = $("<li />").append(a);
+				uTag.append(liTag);
+			});
+			$("#news").html(uTag);s
+		}
+	});
+	req.fail(function (jqXHR, textStatus){
+		alert("failed: " + textStatus);
+	});
+
 });
 
 function max_open(event) {
