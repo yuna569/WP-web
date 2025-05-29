@@ -1,7 +1,14 @@
 var express = require('express');
 var http = require('http');
+const https = require('https');
+const fs - require(fs)
 var path = require('path')
 var static = require('serve-static');
+
+const options = {
+	key: fs.readFileSync("cert.key"),
+	cert: fs.readFileSync("cert.crt")
+};
 
 var app = express();
 var router = express.Router();
@@ -15,6 +22,11 @@ app.use(express.json());		// json 사용
 
 http.createServer(app).listen(app.get('port'), app.get('host'), () => {
 	console.log('Express server running at' + app.get('port') + app.get('host'));
+});
+
+const PORT = 8000;
+https.createServer(app).listen(PORT, app.get('host'), () => {
+	console.log('Express server running at' + PORT + app.get('host'));
 });
 
 // app.use(function(req, res, next) {
