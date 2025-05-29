@@ -69,3 +69,21 @@ router.route('/rss').get(function (req, res){
 		});
 	});
 });
+
+router.route('/rss/youtube').get(function (req, res){
+	console.log("rss data requested");
+	var feed = "https://www.youtube.com/feeds/videos.xml?channel_id=UCYaBl0gtXV_3sHW4bQjq0hA";
+	https.get(feed, function(httpres){
+		var rss_res = "";
+		httpres.on('data', function (chunk){
+			rss_res += chunk;
+		});
+		httpres.on('end', function (){
+			res.send(rss_res);
+			console.log("rss response completed");
+			res.end();
+		});
+	});
+});
+
+

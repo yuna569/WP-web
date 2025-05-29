@@ -240,10 +240,40 @@ $(document).ready(function () {
 					"target": "_blank"
 				})
 				.text(title);
-				var liTag = $("<li />").append(a);
+				var liTag = $("<li />").append(aTag);
 				uTag.append(liTag);
 			});
-			$("#news").html(uTag);s
+			$("#news").html(uTag);
+		}
+	});
+	req.fail(function (jqXHR, textStatus){
+		alert("failed: " + textStatus);
+	});
+
+	var req = $.ajax({
+		url: "/rss/youtube",
+		dataType: "xml"
+		});
+	req.done(function(data) {
+		var items = $(data).find("item");
+		if (items.length > 0) {
+			items = items.slice(0,5);
+			var uTag = $("<ul />");
+			items.each(function() {
+				var item = $(this);
+				var lk = item.find("link").text();
+				var title = item.find("title").text();
+				var sub = item.find("subnail");
+				var aTag = $("<a />")
+				.attr({
+					"href": lk,
+					"target": "_blank"
+				})
+				var img = $("<img />").attr("src":sub);
+				var liTag = $("<li />").append(aTag, img);
+				uTag.append(liTag);
+			});
+			$("#youtube").html(uTag);
 		}
 	});
 	req.fail(function (jqXHR, textStatus){
