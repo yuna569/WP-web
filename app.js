@@ -1,7 +1,7 @@
 var express = require('express');
 var http = require('http');
 const https = require('https');
-const fs - require(fs)
+const fs = require('fs')
 var path = require('path')
 var static = require('serve-static');
 
@@ -53,3 +53,19 @@ router.route('/routetest').get(function(req, res) {
 });
 
 app.use('/', router);
+
+router.route('/rss').get(function (req, res){
+	console.log("rss data requested");
+	var feed = "https://news.sbs.co.kr/news/headlineRssFeed.do?plink=RSSREADER";
+	https.get(feed, function(httpres){
+		var rss_res = "";
+		httpres.on('data', function (chunk){
+			rss_res += chunk;
+		});
+		httpres.on('end', function (){
+			res.send(rss_res);
+			console.log("rss response completed");
+			res.end();
+		});
+	});
+});
